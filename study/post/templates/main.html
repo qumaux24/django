@@ -6,10 +6,50 @@
 <body>
     <h1>목록</h1>
     <ul>
-        {% for post in posts %}
+        {% for post in list %}
         <li><a href="{% url 'post:show' post.id %}">{{ post.title }}</a>&nbsp;&nbsp;&nbsp;작성자: {{post.writer}}</p></li>
         {% endfor %}
     </ul>
+    
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ list.previous_page_number }}">이전</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+            </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in list.paginator.page_range %}
+        {% if page_number >= list.number|add:-5 and page_number <= list.number|add:5 %}
+        {% if page_number == list.number %}
+            <li class="page-item active" aria-current="page">{#구분을 위해  누른 번호가 파랑으로 보임#}
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+        {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ list.next_page_number }}">다음</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+
     <a href="{% url 'post:write' %}">글 작성</a>
 </body>
 </html>

@@ -9,7 +9,7 @@ class Post(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     writer=models.ForeignKey(User, on_delete=models.CASCADE)
     like_users=models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='like_posts', blank=True)
-    modify_date=models.DateTimeField(null=True, blank=True)
+    updated_at=models.DateTimeField(null=True, blank=True, auto_now=True)
     
     def __str__(self):
         return self.title
@@ -26,7 +26,6 @@ class Comment(models.Model):
     writer=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     comment=models.TextField()
     created_at=models.DateTimeField(auto_now_add=True)
-    updated_at=models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return self.comment

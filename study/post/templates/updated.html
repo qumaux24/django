@@ -4,25 +4,28 @@
 </head>
 <body>
     <h1>글 수정</h1>
-    <form action="{% url 'post:updateget' post.pk %}" method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ postForm.as_p }}
-        <input multiple type="file" name="새이미지" accept="image/*" id="id_image">
+
+        <h2>이미지 추가</h2>
+        <input type="file" name="new_image" multiple accept="image/*" id="id_image">
         <button type="submit">저장</button>
-        {% comment %} <input multiple type="file" name="image" aceept="image/*" id="id_image"> {% endcomment %}
-    </form>
-    <h2>기존 이미지</h2>
-    <form method="post">
+
+        <h2>기존 이미지</h2>
         {% csrf_token %}
-        <ul>
-            {% for image in images %}
-                <li>
-                    <img src="{{ image.image.url }}" alt="Image" style="max-width: 200px;">
-                    {% comment %} {{form.remove_image.label_tag}}{{form.remove_image}} {% endcomment %}
-                    <button type="submit" name="image_id" value="{{ image.id }}">삭제</button>
-                </li>
-            {% endfor %}
-        </ul>
+            <ul>
+                {% for image in images %}
+                    <li>
+                        <img src="{{ image.image.url }}" alt="Image" style="max-width: 200px;">
+                        {% comment %} {{form.remove_image.label_tag}}{{form.remove_image}} {% endcomment %}
+                        <form action="{% url 'post:image_delete' post_id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <button type="submit" name="image_id" value="{{ image.id }}">삭제</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
     </form>
 </body>
 </html>
